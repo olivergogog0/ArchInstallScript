@@ -79,9 +79,10 @@ function updateSystemClock(){
 }
 function updateMirrorServer(){
     infoln "update the mirror server"
+    dateStr=$(date +%Y_%m_%d_%H_%M_%S)
     set -x 
-    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    echo ${MIRRORSERVER} > /etc/pacman.d/mirrorlist
+    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.${dateStr}.backup
+    echo "${MIRRORSERVER}" > /etc/pacman.d/mirrorlist
     { set +x; } 2>/dev/null
     if [ $res -eq 0 ]; then
         successln "update mirror server successfully"
@@ -99,7 +100,7 @@ function partitionDisk(){
 function prepare(){
     forbidReflector
     checkUEFI
-    checkNetwork
+    # checkNetwork
     updateSystemClock
     updateMirrorServer
     partitionDisk

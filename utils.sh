@@ -6,7 +6,9 @@ C_YELLOW='\033[1;33m'
 
 # println echos string
 function println() {
+  echo
   echo -e "$1"
+  echo
 }
 
 # errorln echos i red color
