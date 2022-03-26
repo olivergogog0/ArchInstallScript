@@ -260,13 +260,14 @@ function generateFstab(){
 
 function chroot(){
     infoln "chroot to /mnt"
+    infoln "run the following :"
+    infoln "cd home"
+    infoln "./install.sh b - set basic config for system in next step"
     set -x 
     cp ./install.sh /mnt/home/install.sh
     arch-chroot /mnt
     set +x
-    infoln "run the following :"
-    infoln "cd home"
-    infoln "./install.sh basic - set basic config for system in next step"
+
 }
 
 function basic(){
@@ -306,12 +307,12 @@ function basic(){
 function bootLoader(){
     infoln "install efi packages "
     set -x
-    pacman -S grub efibootmgr op-prober
+    pacman -S grub efibootmgr os-prober
     set +x
 
     infoln "install grub on efi partition"
     set -x 
-    grub-install --target=x86_64-efi --efi-directory=/boot/efi -bootloader-id=${HOSTNAME} 
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=${HOSTNAME} 
     set +x
 
     infoln "change grub file"
@@ -375,19 +376,20 @@ case "$cmd" in
     "f" | "format" )
     infoln "after you partition the disk yourself and edit the env of this script"
     askContinue "format EFI, SWAP and the main partition. create subvolumes on btrfs. mount the partition "
-    format
+    formatPartition
     ;;
     "i" | "install" )
     infoln "after format, create and mount "
     askContinue "install base system by pacstrap. generate fstab files. chroot to the /mnt and copy this script to /mnt/home"
     installSystem
     generateFstab
+    chroot
     ;;
     "b" | "basic" )
     infoln " after pacstrap, fstab, chroot"
     askContinue "set hostname, hosts and timezones. sync the hwc. set locale. set root passwd. install ucode. install bootloader "
     basic
-    bootloader
+    bootLoader
     finishInstall
     ;;
     "")
