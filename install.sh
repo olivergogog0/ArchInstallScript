@@ -61,8 +61,8 @@ function fatalln() {
 }
 
 function printHelp() {
-    successln "Welcome to the arch install script by oliver !"
-    infoln "now print the usage for this script"
+    successln "Welcome to use the Arch Install Script writen by oliver !"
+    infoln "now print the usage message for this script"
 
     println "./install.sh "
 
